@@ -44,6 +44,6 @@ async def on_message(message):
         if send:
             await message.channel.send(value)
             break
-    
+
 
 client.run(TOKEN)
