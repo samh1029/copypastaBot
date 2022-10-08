@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-client = discord.Client()
+intents = discord.Intents.all()
+client = discord.Client(intents=intents)
 
 copypastaDict = {}
 
@@ -32,7 +33,6 @@ async def on_message(message):
     if message.author == client.user:
         return
     send = False
-    message.content = message.content.lower()
     for key, value in copypastaDict.items():
         if isinstance(key, tuple):
             for i in key:
