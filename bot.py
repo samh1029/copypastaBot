@@ -3,11 +3,12 @@ import os
 import discord
 import json
 import io
+import random
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-
+random.seed()
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
@@ -31,6 +32,9 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.author == client.user:
+        return
+    if message.author.name == "tkrios" and random.randrange(1,10) == 1:
+        await message.channel.send("shutup kyle")
         return
     send = False
     for key, value in copypastaDict.items():
