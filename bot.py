@@ -37,6 +37,7 @@ async def on_message(message):
         await message.channel.send("shutup kyle")
         return
     send = False
+    message.content = message.content.lower()
     for key, value in copypastaDict.items():
         if isinstance(key, tuple):
             for i in key:
