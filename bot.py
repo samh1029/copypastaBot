@@ -3,7 +3,6 @@ import os
 import discord
 import json
 import io
-import csv
 import random
 from dotenv import load_dotenv
 
@@ -15,23 +14,13 @@ client = discord.Client(intents=intents)
 
 copypastaDict = {}
 
-# with io.open("copypastas.txt", encoding="utf8") as f:
-#     Lines = f.readlines()
-#     for line in Lines:
-#         if line.strip():
-#             a,b = line.split("$")
-#             if "," in a:
-#                 copypastaDict[tuple(a.split(","))] = b
-#             copypastaDict[a] = b
-
-
-with io.open("copypastas.csv", encoding="utf8") as f:
+with io.open("copypastas.txt", encoding="utf8") as f:
     Lines = f.readlines()
     for line in Lines:
         if line.strip():
-            a,b = line.split(",", 1)
+            a,b = line.split("$")
             if "," in a:
-                copypastaDict[tuple(a.split(";"))] = b
+                copypastaDict[tuple(a.split(","))] = b
             copypastaDict[a] = b
 
 
