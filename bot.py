@@ -26,7 +26,8 @@ with io.open("copypastas.txt", encoding="utf8") as f:
 
 @client.event
 async def on_ready():
-    print(f'{client.user} has connected to discord server: {client.guilds[0]}')
+    for guilds in client.guilds:
+        print(f'{client.user} has connected to discord server: {guilds}')
 
 
 @client.event
