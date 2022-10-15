@@ -33,7 +33,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    if message.author.name == "Rainbows__1464" and random.randrange(1,30) == 1:
+    if message.author.name == "Rainbows__1464" and random.randrange(1,15) == 1:
         await message.channel.send("shutup kyle")
         return
     send = False
