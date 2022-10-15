@@ -1,7 +1,6 @@
 # bot.py
 import os
 import discord
-import json
 import io
 import random
 from dotenv import load_dotenv
