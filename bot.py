@@ -28,7 +28,7 @@ async def on_ready():
         print(f'{bot.user} has connected to discord server: {guilds}')
 
 
-@bot.command()
+@bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
 async def reset(ctx):
     resetCSV()
 
