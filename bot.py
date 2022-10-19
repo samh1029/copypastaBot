@@ -11,26 +11,12 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 random.seed()
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
-
 copypastaDict = {}
 
-# with io.open("copypastas.txt", encoding="utf8") as f:
-#     Lines = f.readlines()
-#     for line in Lines:
-#         if line.strip():
-#             a,b = line.split("$")
-#             if "," in a:
-#                 copypastaDict[tuple(a.split(","))] = b
-#             copypastaDict[a] = b
 
-
-# with open('copypastas.csv', mode='r') as infile:
-#     reader = csv.reader(infile)
-#     with open('copypastas.csv', mode='w') as outfile:
-#         writer = csv.writer(outfile)
-#         copypastaDict = {rows[0]:rows[1] for rows in reader}
-
-copypastaDict = csv.DictReader(open("copypastas.csv"))
+with open('copypastas.csv', mode='r', encoding="utf8") as infile:
+    reader = csv.reader(infile)
+    copypastaDict = {rows[0]:rows[1] for rows in reader}
 
 
 @client.event
@@ -49,8 +35,8 @@ async def on_message(message):
     send = False
     message.content = message.content.lower()
     for key, value in copypastaDict.items():
-        if isinstance(key, tuple):
-            for i in key:
+        if "," in key:
+            for i in key.split(","):
                 if i in message.content:
                     send = True
                     break
