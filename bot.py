@@ -14,6 +14,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='-',intents=intents)
 copypastaDict = {}
 
+
 def resetCSV():
     with open('copypastas.csv', mode='r', encoding="utf8") as infile:
         reader = csv.reader(infile)
