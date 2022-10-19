@@ -1,6 +1,8 @@
 Pasta-Chan
 
-(This is really bad please no judging)
+This is really bad please no judging
+
+I AM CURRENTLY UPGRADING TO CSV FROM CUSTOM FILE
 
 Install requirements using pip3 install -r requirements.txt
 
