@@ -28,11 +28,6 @@ async def on_ready():
         print(f'{bot.user} has connected to discord server: {guilds}')
 
 
-@bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
-async def reset(ctx):
-    resetCSV()
-
-
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
@@ -54,6 +49,11 @@ async def on_message(message):
         if send:
             await message.channel.send(value)
             break
+
+
+@bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
+async def reset(ctx):
+    resetCSV()
 
 
 resetCSV()
