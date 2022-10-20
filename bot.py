@@ -1,46 +1,46 @@
 # bot.py
 import os
 import discord
+from discord.ext import commands
 import io
 import random
+import csv
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 random.seed()
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
-
+bot = commands.Bot(command_prefix='-',intents=intents)
 copypastaDict = {}
 
-with io.open("copypastas.txt", encoding="utf8") as f:
-    Lines = f.readlines()
-    for line in Lines:
-        if line.strip():
-            a,b = line.split("$")
-            if "," in a:
-                copypastaDict[tuple(a.split(","))] = b
-            copypastaDict[a] = b
+
+def resetCSV():
+    with open('copypastas.csv', mode='r', encoding="utf8") as infile:
+        reader = csv.reader(infile)
+        global copypastaDict
+        copypastaDict = {rows[0]:rows[1] for rows in reader}
 
 
-@client.event
+@bot.event
 async def on_ready():
-    for guilds in client.guilds:
-        print(f'{client.user} has connected to discord server: {guilds}')
+    for guilds in bot.guilds:
+        print(f'{bot.user} has connected to discord server: {guilds}')
 
 
-@client.event
+@bot.event
 async def on_message(message):
-    if message.author == client.user:
+    await bot.process_commands(message)
+    message.content = message.content.lower()
+    send = False
+    if message.author == bot.user:
         return
     if message.author.name == "Rainbows__1464" and random.randrange(1,15) == 1:
         await message.channel.send("shutup kyle")
         return
-    send = False
-    message.content = message.content.lower()
     for key, value in copypastaDict.items():
-        if isinstance(key, tuple):
-            for i in key:
+        if "," in key:
+            for i in key.split(","):
                 if i in message.content:
                     send = True
                     break
@@ -51,4 +51,10 @@ async def on_message(message):
             break
 
 
-client.run(TOKEN)
+@bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
+async def reset(ctx):
+    resetCSV()
+
+
+resetCSV()
+bot.run(TOKEN)
