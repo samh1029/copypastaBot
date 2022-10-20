@@ -53,7 +53,9 @@ async def on_message(message):
 
 @bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
 async def reset(ctx):
+    os.system("git pull")
     resetCSV()
+    await ctx.send("Successfully reset CSV")
 
 
 resetCSV()
