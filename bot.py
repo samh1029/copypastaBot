@@ -49,7 +49,7 @@ async def on_message(message):
                     break
         elif key in message.content:
             send = True
-        if send:
+        if send and random.randrange(1,5) == 1:
             await message.channel.send(value)
             break
 
