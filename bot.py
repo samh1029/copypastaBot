@@ -13,6 +13,7 @@ random.seed()
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='-',intents=intents)
 copypastaDict = {}
+userDict = {"Rainbows__1464":"kyle","unix":"max"}
 
 
 def resetCSV():
@@ -35,22 +36,23 @@ async def on_message(message):
     send = False
     if message.author == bot.user:
         return
-    if message.author.name == "Rainbows__1464" or message.author.name == "unix" and random.randrange(1,15) == 1:
-        if message.author.name == "Rainbows__1464":
-            await message.channel.send("shutup kyle")
-        else:
-            await message.channel.send("shutup max")
-        return
+    try:
+        if userDict[message.author.name]:
+            await message.channel.send(f"shutup {userDict[message.author.name]}")
+    except:
+        pass
     for key, value in copypastaDict.items():
         if "," in key:
             for i in key.split(","):
                 if i in message.content:
                     send = True
                     break
-        elif key in message.content:
+        if key in message.content:
             send = True
         if send and random.randrange(1,5) == 1:
             await message.channel.send(value)
+            break
+        elif send:
             break
 
 
