@@ -35,8 +35,11 @@ async def on_message(message):
     send = False
     if message.author == bot.user:
         return
-    if message.author.name == "Rainbows__1464" and random.randrange(1,15) == 1:
-        await message.channel.send("shutup kyle")
+    if message.author.name == "Rainbows__1464" or message.author.name == "unix" and random.randrange(1,15) == 1:
+        if message.author.name == "Rainbows__1464":
+            await message.channel.send("shutup kyle")
+        else:
+            await message.channel.send("shutup max")
         return
     for key, value in copypastaDict.items():
         if "," in key:
