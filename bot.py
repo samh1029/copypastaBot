@@ -37,7 +37,7 @@ async def on_message(message):
     if message.author == bot.user:
         return
     try:
-        if userDict[message.author.name]:
+        if userDict[message.author.name] and random.randrange(1,15) == 1:
             await message.channel.send(f"shutup {userDict[message.author.name]}")
     except:
         pass
