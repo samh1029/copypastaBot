@@ -6,6 +6,8 @@ import io
 import random
 import csv
 from dotenv import load_dotenv
+import requests
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -61,6 +63,18 @@ async def reset(ctx):
     os.system("git reset --hard master")
     resetCSV()
     await ctx.send("Successfully reset CSV")
+
+
+@bot.command(name="mc", help="Get current logged in users of a MC server if any")
+async def mc(ctx):
+    server_address = ctx.message.content.split(" ")[1]
+    link = "https://api.mcsrvstat.us/2/" + server_address
+    response = requests.get(link)
+    try:
+        users = ' '.join(response.json()["players"]["list"])
+        await ctx.send(users)
+    except:
+        await ctx.send("No logged in users")
 
 
 resetCSV()
