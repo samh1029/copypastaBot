@@ -60,7 +60,7 @@ async def on_message(message):
 
 @bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
 async def reset(ctx):
-    os.system("git reset --hard master")
+    os.system("git pull")
     resetCSV()
     await ctx.send("Successfully reset CSV")
 
@@ -71,8 +71,8 @@ async def mc(ctx):
     link = "https://api.mcsrvstat.us/2/" + server_address
     response = requests.get(link)
     try:
-        users = ' '.join(response.json()["players"]["list"])
-        await ctx.send(users)
+        users = ', '.join(response.json()["players"]["list"])
+        await ctx.send(f"Femboys current are {users}")
     except:
         await ctx.send("No logged in users")
 
