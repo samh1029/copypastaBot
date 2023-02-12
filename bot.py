@@ -72,7 +72,7 @@ async def mc(ctx):
     response = requests.get(link)
     try:
         users = ', '.join(response.json()["players"]["list"])
-        await ctx.send(f"Femboys current are {users}")
+        await ctx.send(f"Femboys currently are {users}")
     except:
         await ctx.send("No logged in users")
 
