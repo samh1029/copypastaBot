@@ -72,9 +72,9 @@ async def mc(ctx):
     response = requests.get(link)
     try:
         users = ', '.join(response.json()["players"]["list"])
-        await ctx.send(f"Femboys currently are {users}")
+        await ctx.send(f"Femboys currently are {users} *˚*(ꈍ ω ꈍ).₊̣̇.")
     except:
-        await ctx.send("No logged in users")
+        await ctx.send("No femboys on the server *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:*")
 
 
 resetCSV()
