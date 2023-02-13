@@ -15,14 +15,13 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 random.seed()
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='-',intents=intents)
-copypasta_dict = {}
 
 
 def reset_csv():
     with open('copypastas.csv', 'r', encoding='utf8') as file:
         reader = csv.reader(file)
-        global copypasta_dict
         copypasta_dict = {rows[0]:rows[1] for rows in reader}
+        return copypasta_dict
 
 
 def read_file(file_path):
@@ -81,7 +80,7 @@ async def on_message(message):
 @bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
 async def reset(ctx):
     os.system("git pull")
-    reset_csv()
+    copypasta_dict = reset_csv()
     await ctx.send("Successfully reset CSV")
 
 
@@ -97,7 +96,7 @@ async def mc(ctx):
         await ctx.send("No femboys on the server *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:*")
 
 
-reset_csv()
+copypasta_dict = reset_csv()
 birth_dict = read_file("birthdays.txt")
 user_dict = read_file("shutup.txt")
 bot.run(TOKEN)
