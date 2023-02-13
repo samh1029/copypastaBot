@@ -16,8 +16,6 @@ random.seed()
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='-',intents=intents)
 copypasta_dict = {}
-user_dict = {"Rainbows__1464":"kyle","unix":"max"}
-birth_dict = {"18/10":"Sam","20/09":"Anthony","06/01":"Luke","07/01":"Kyle","25/10":"Jon","30/03":"Andrew"}
 
 
 def reset_csv():
@@ -25,6 +23,17 @@ def reset_csv():
         reader = csv.reader(file)
         global copypasta_dict
         copypasta_dict = {rows[0]:rows[1] for rows in reader}
+
+
+def read_file(file_path):
+    result = {}
+    with open(file_path, 'r') as file:
+        for line in file:
+            line = line.strip()
+            if line and not line.startswith('#'):
+                key, value = line.split('=')
+                result[key] = value
+    return result
 
 
 @bot.event
@@ -43,7 +52,7 @@ async def check_birthday():
             if today == birthday:
                 channel = bot.get_channel(int(os.getenv('CHANNEL_ID')))
                 years_to_live = random.randrange(1,10)
-                await channel.send(f"Happy birthday {username} 🎂🎉🎈 you have {years_to_live} years left alive")
+                await channel.send(f"Happy birthday {username} 🎂🎉🎈 you have {years_to_live} year(s) left alive")
         await asyncio.sleep(86400)
 
 
@@ -89,4 +98,6 @@ async def mc(ctx):
 
 
 reset_csv()
+birth_dict = read_file("birthdays.txt")
+user_dict = read_file("shutup.txt")
 bot.run(TOKEN)

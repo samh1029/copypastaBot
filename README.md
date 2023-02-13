@@ -8,6 +8,12 @@ Make a file called .env and add
 
 `DISCORD_TOKEN="Discord Token"`
 
+Make 2 files called birthdays.txt and shutup.txt and add a set of users such as:
+
+`01/01=Bob` For birthdays.txt
+
+`DisordName=realname` For shutup.txt
+
 Run bot using 
 
 `python3 bot.py`
