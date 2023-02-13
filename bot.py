@@ -41,7 +41,7 @@ async def check_birthday():
         today = datetime.datetime.now().strftime("%d/%m")
         for birthday, username in birth_dict.items():
             if today == birthday:
-                channel = bot.get_channel(779285370797948940)
+                channel = bot.get_channel(int(os.getenv('CHANNEL_ID')))
                 years_to_live = random.randrange(1,10)
                 await channel.send(f"Happy birthday {username} 🎂🎉🎈 you have {years_to_live} years left alive")
         await asyncio.sleep(86400)
