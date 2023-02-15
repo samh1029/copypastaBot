@@ -18,4 +18,5 @@ SHUTUP_FILE = 'shutup.txt'
 # Prefix for bot commands
 COMMAND_PREFIX = '-'
 
+# URL to the MC Server Status API
 MC_API_URL = 'https://api.mcsrvstat.us/2/'
