@@ -11,9 +11,11 @@ import sys
 
 import discord
 import requests
-from discord.ext import commands
 from dotenv import load_dotenv
+from discord.ext import commands
+
 from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL
+
 
 
 intents = discord.Intents.all()
