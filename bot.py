@@ -7,42 +7,58 @@ import os
 import random
 import re
 import subprocess
+import sys
 
 import discord
 import requests
 from discord.ext import commands
 from dotenv import load_dotenv
+from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL
 
 
 intents = discord.Intents.all()
-TOKEN = os.getenv('DISCORD_TOKEN')
-CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
-CSV_FILE = 'copypastas.csv'
-BIRTHDAYS_FILE = 'birthdays.txt'
-SHUTUP_FILE = 'shutup.txt'
-MC_API_URL = 'https://api.mcsrvstat.us/2/'
-bot = commands.Bot(command_prefix='-',intents=intents)
+bot = commands.Bot(command_prefix=COMMAND_PREFIX,intents=intents)
+copypasta_dict = reset_csv()
 
 
 def reset_csv():
-    with open('copypastas.csv', 'r', encoding='utf8', newline='') as file:
-        reader = csv.DictReader(file)
-        copypasta_dict = {rows[0]:rows[1] for rows in reader}
-    return copypasta_dict
+    try:
+        with open(COPYPASTAS_FILE, 'r', encoding='utf8', newline='') as file:
+            reader = csv.DictReader(file)
+            copypasta_dict = {row[0]:row[1] for row in reader}
+        return copypasta_dict
+    except (FileNotFoundError, PermissionError) as e:
+        print(f"Error opening file: {e}", file=sys.stderr)
+        return None
+    except csv.Error as e:
+        print(f"Error reading CSV file: {e}", file=sys.stderr)
+        return None
+
 
 
 def read_file(file_path):
-    with open(file_path, 'r') as file:
-        result = {line.split("=")[0]: ' '.join(line.split("=")[1:]) for line in file if line.strip() and not line.startswith('#')}
+    result = {}
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                line = line.rstrip()
+                if line and not line.startswith('#'):
+                    key, value = line.split('=', 1)
+                    result[key] = value.strip()
+    except (IOError, OSError) as e:
+        print(f"Error opening or reading file: {e}", file=sys.stderr)
     return result
 
 
 @bot.event
 async def on_ready():
-    for guilds in bot.guilds:
-        print(f'{bot.user} has connected to discord server: {guilds}')
-    await bot.wait_until_ready()
-    bot.loop.create_task(check_birthday())
+    for guild in bot.guilds:
+        print(f'{bot.user} has connected to Discord server: {guild}')
+    try:
+        await bot.wait_until_ready()
+        bot.loop.create_task(check_birthday())
+    except Exception as e:
+        print(f"An error occurred in on_ready: {e}", file=sys.stderr)
 
 
 async def check_birthday():
@@ -69,7 +85,7 @@ async def on_message(message):
             if user_name == username and random.randrange(1, 15) == 1:
                 await message.channel.send(f"shutup {name}")
     except Exception as e:
-        print(f'Error reading shutup file: {e}')
+        print(f'Error reading shutup file: {e}', file=sys.stderr)
     for key, value in copypasta_dict.items():
         if "," in key:
             should_send_copypasta = any(substring in message.content for substring in key.split(","))
@@ -87,9 +103,9 @@ async def reset(ctx):
         copypasta_dict = reset_csv()
         await ctx.send("Successfully reset CSV")
     except subprocess.CalledProcessError as e:
-        await ctx.send(f"Error resetting CSV: {e}")
+        await ctx.send(f"Error resetting CSV: {e}", file=sys.stderr)
     except Exception as e:
-        await ctx.send(f"Unexpected error: {e}")
+        await ctx.send(f"Unexpected error: {e}", file=sys.stderr)
     else:
         return copypasta_dict
 
@@ -113,11 +129,11 @@ async def mc(ctx):
         else:
             await ctx.send("No femboys on the server *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:*")
     except requests.exceptions.HTTPError as e:
-        await ctx.send(f"Failed to retrieve server information: {e}")
+        await ctx.send(f"Failed to retrieve server information: {e}", file=sys.stderr)
     except (ValueError, KeyError):
-        await ctx.send("Failed to parse server information")
+        await ctx.send("Failed to parse server information", file=sys.stderr)
     except Exception as e:
-        await ctx.send(f"Unexpected error: {e}")
+        await ctx.send(f"Unexpected error: {e}", file=sys.stderr)
 
 
 def is_valid_server_address(server_address):
@@ -127,5 +143,4 @@ def is_valid_server_address(server_address):
     return bool(re.match(regex, server_address))
 
 
-copypasta_dict = reset_csv()
 bot.run(TOKEN)
