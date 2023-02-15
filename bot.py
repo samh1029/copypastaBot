@@ -143,5 +143,4 @@ def is_valid_server_address(server_address):
 
 
 copypasta_dict = reset_csv()
-print(TOKEN)
 bot.run(TOKEN)
