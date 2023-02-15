@@ -16,7 +16,6 @@ from discord.ext import commands
 from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL
 
 
-
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=COMMAND_PREFIX,intents=intents)
 copypasta_dict = reset_csv()
