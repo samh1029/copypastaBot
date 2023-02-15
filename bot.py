@@ -18,13 +18,12 @@ from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FI
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=COMMAND_PREFIX,intents=intents)
-copypasta_dict = reset_csv()
 
 
 def reset_csv():
     try:
         with open(COPYPASTAS_FILE, 'r', encoding='utf8', newline='') as file:
-            reader = csv.DictReader(file)
+            reader = csv.reader(file)
             copypasta_dict = {row[0]:row[1] for row in reader}
         return copypasta_dict
     except (FileNotFoundError, PermissionError) as e:
@@ -81,7 +80,7 @@ async def on_message(message):
         return
     user_name = message.author.name
     try:
-        for username, name in read_file(SHUTUP_FILE).items:
+        for username, name in read_file(SHUTUP_FILE).items():
             if user_name == username and random.randrange(1, 15) == 1:
                 await message.channel.send(f"shutup {name}")
     except Exception as e:
@@ -143,4 +142,6 @@ def is_valid_server_address(server_address):
     return bool(re.match(regex, server_address))
 
 
+copypasta_dict = reset_csv()
+print(TOKEN)
 bot.run(TOKEN)
