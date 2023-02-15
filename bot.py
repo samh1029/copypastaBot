@@ -10,10 +10,16 @@ import requests
 import datetime
 import asyncio
 
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
-random.seed()
 intents = discord.Intents.all()
+TOKEN = os.getenv('DISCORD_TOKEN')
+CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
+CSV_FILE = 'copypastas.csv'
+BIRTHDAYS_FILE = 'birthdays.txt'
+SHUTUP_FILE = 'shutup.txt'
+MC_API_URL = 'https://api.mcsrvstat.us/2/'
+BIRTHDAYS_DICT = read_file(BIRTHDAYS_FILE)
+USER_DICT = read_file(SHUTUP_FILE)
+
 bot = commands.Bot(command_prefix='-',intents=intents)
 
 
@@ -47,9 +53,9 @@ async def check_birthday():
     await bot.wait_until_ready()
     while not bot.is_closed():
         today = datetime.datetime.now().strftime("%d/%m")
-        for birthday, username in birth_dict.items():
+        for birthday, username in BIRTHDAYS.DICT.items():
             if today == birthday:
-                channel = bot.get_channel(int(os.getenv('CHANNEL_ID')))
+                channel = bot.get_channel(CHANNEL_ID)
                 years_to_live = random.randrange(1,10)
                 await channel.send(f"Happy birthday {username} 🎂🎉🎈 you have {years_to_live} year(s) left alive")
         await asyncio.sleep(86400)
@@ -64,8 +70,8 @@ async def on_message(message):
         return
 
     user_name = message.author.name
-    if user_name in user_dict and random.randrange(1, 15) == 1:
-        await message.channel.send(f"shutup {user_dict[user_name]}")
+    if user_name in USER_DICT and random.randrange(1, 15) == 1:
+        await message.channel.send(f"shutup {USER_DICT[user_name]}")
 
     for key, value in copypasta_dict.items():
         if "," in key:
@@ -87,7 +93,7 @@ async def reset(ctx):
 @bot.command(name="mc", help="Get current logged in users of a MC server if any")
 async def mc(ctx):
     server_address = ctx.message.content.split(" ")[1]
-    link = f"https://api.mcsrvstat.us/2/{server_address}"
+    link = MC_API_URL + server_address
     response = requests.get(link)
     try:
         users = ', '.join(response.json()["players"]["list"])
@@ -97,6 +103,4 @@ async def mc(ctx):
 
 
 copypasta_dict = reset_csv()
-birth_dict = read_file("birthdays.txt")
-user_dict = read_file("shutup.txt")
 bot.run(TOKEN)
