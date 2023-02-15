@@ -1,16 +1,18 @@
 # bot.py
-import os
-import subprocess
-import discord
-from discord.ext import commands
-import io
-import random
-import csv
-from dotenv import load_dotenv
-import requests
-import datetime
 import asyncio
+import csv
+import datetime
+import io
+import os
+import random
 import re
+import subprocess
+
+import discord
+import requests
+from discord.ext import commands
+from dotenv import load_dotenv
+
 
 intents = discord.Intents.all()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -19,7 +21,6 @@ CSV_FILE = 'copypastas.csv'
 BIRTHDAYS_FILE = 'birthdays.txt'
 SHUTUP_FILE = 'shutup.txt'
 MC_API_URL = 'https://api.mcsrvstat.us/2/'
-
 bot = commands.Bot(command_prefix='-',intents=intents)
 
 
@@ -34,7 +35,6 @@ def read_file(file_path):
     with open(file_path, 'r') as file:
         result = {line.split("=")[0]: ' '.join(line.split("=")[1:]) for line in file if line.strip() and not line.startswith('#')}
     return result
-
 
 
 @bot.event
