@@ -24,21 +24,17 @@ bot = commands.Bot(command_prefix='-',intents=intents)
 
 
 def reset_csv():
-    with open('copypastas.csv', 'r', encoding='utf8') as file:
-        reader = csv.reader(file)
+    with open('copypastas.csv', 'r', encoding='utf8', newline='') as file:
+        reader = csv.DictReader(file)
         copypasta_dict = {rows[0]:rows[1] for rows in reader}
-        return copypasta_dict
+    return copypasta_dict
 
 
 def read_file(file_path):
-    result = {}
     with open(file_path, 'r') as file:
-        for line in file:
-            line = line.strip()
-            if line and not line.startswith('#'):
-                key, value = line.split('=')
-                result[key] = value
+        result = {line.split("=")[0]: ' '.join(line.split("=")[1:]) for line in file if line.strip() and not line.startswith('#')}
     return result
+
 
 
 @bot.event
@@ -53,7 +49,7 @@ async def check_birthday():
     await bot.wait_until_ready()
     while not bot.is_closed():
         today = datetime.datetime.now().strftime("%d/%m")
-        for birthday, username in BIRTHDAYS.DICT.items():
+        for birthday, username in BIRTHDAYS_DICT.items():
             if today == birthday:
                 channel = bot.get_channel(CHANNEL_ID)
                 years_to_live = random.randrange(1,10)
@@ -68,11 +64,9 @@ async def on_message(message):
     send = False
     if message.author == bot.user:
         return
-
     user_name = message.author.name
     if user_name in USER_DICT and random.randrange(1, 15) == 1:
         await message.channel.send(f"shutup {USER_DICT[user_name]}")
-
     for key, value in copypasta_dict.items():
         if "," in key:
             send = any(i in message.content for i in key.split(","))
