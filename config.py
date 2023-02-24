@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # Discord bot token
-TOKEN = os.getenv('DISCORD_TOKEN_2')
+TOKEN = os.getenv('DISCORD_TOKEN')
 
 # Discord channel ID where the bot will post messages
 CHANNEL_ID = int(os.getenv('CHANNEL_ID', default=0))
