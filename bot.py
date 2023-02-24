@@ -3,6 +3,7 @@ import asyncio
 import csv
 import datetime
 import io
+import openai
 import os
 import random
 import re
@@ -13,40 +14,12 @@ import discord
 import requests
 from discord.ext import commands
 
-from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL
-
+from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL, OPENAPI
+from functions import reset_csv, read_file, is_valid_server_address
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=COMMAND_PREFIX,intents=intents)
-
-
-def reset_csv():
-    try:
-        with open(COPYPASTAS_FILE, 'r', encoding='utf8', newline='') as file:
-            reader = csv.reader(file)
-            copypasta_dict = {row[0]:row[1] for row in reader}
-        return copypasta_dict
-    except (FileNotFoundError, PermissionError) as e:
-        print(f"Error opening file: {e}", file=sys.stderr)
-        return None
-    except csv.Error as e:
-        print(f"Error reading CSV file: {e}", file=sys.stderr)
-        return None
-
-
-
-def read_file(file_path):
-    result = {}
-    try:
-        with open(file_path, 'r') as file:
-            for line in file:
-                line = line.rstrip()
-                if line and not line.startswith('#'):
-                    key, value = line.split('=', 1)
-                    result[key] = value.strip()
-    except (IOError, OSError) as e:
-        print(f"Error opening or reading file: {e}", file=sys.stderr)
-    return result
+openai.api_key = OPENAPI
 
 
 @bot.event
@@ -99,7 +72,7 @@ async def on_message(message):
 async def reset(ctx):
     try:
         subprocess.run(["git", "pull"], check=True)
-        copypasta_dict = reset_csv()
+        copypasta_dict = reset_csv(COPYPASTAS_FILE)
         await ctx.send("Successfully reset CSV")
     except subprocess.CalledProcessError as e:
         await ctx.send(f"Error resetting CSV: {e}", file=sys.stderr)
@@ -135,12 +108,23 @@ async def mc(ctx):
         await ctx.send(f"Unexpected error: {e}", file=sys.stderr)
 
 
-def is_valid_server_address(server_address):
-    # Check if the server address matches the format of a valid Minecraft server address
-    # (e.g. "mc.example.com:25565" or "123.45.67.89:25565")
-    regex = r"^(?:(?:[a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)+[a-z]{2,}$|(?:\d{1,3}\.){3}\d{1,3}:\d{1,5}$"
-    return bool(re.match(regex, server_address))
+@bot.command()
+async def ask(ctx, *words):
+    prompt = " ".join(words)
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            max_tokens=500
+        )
+        await ctx.send(response.choices[0].text)
+    except openai.error.AuthenticationError:
+        await ctx.send("Invalid OpenAI API key. Please check your API key and try again.")
+    except openai.error.APIError as e:
+        await ctx.send(f"OpenAI API error: {str(e)}")
+    except Exception as e:
+        await ctx.send(f"An error occurred: {str(e)}")
 
 
-copypasta_dict = reset_csv()
+copypasta_dict = reset_csv(COPYPASTAS_FILE)
 bot.run(TOKEN)
