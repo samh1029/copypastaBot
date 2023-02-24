@@ -109,12 +109,13 @@ async def mc(ctx):
 
 
 @bot.command()
-async def ask(ctx, prompt):
+async def ask(ctx, *words):
+    prompt = " ".join(words)
     try:
         response = openai.Completion.create(
             engine="text-davinci-002",
             prompt=prompt,
-            max_tokens=50
+            max_tokens=500
         )
         await ctx.send(response.choices[0].text)
     except openai.error.AuthenticationError:
