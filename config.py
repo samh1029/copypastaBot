@@ -23,4 +23,4 @@ COMMAND_PREFIX = '-'
 # URL to the MC Server Status API
 MC_API_URL = 'https://api.mcsrvstat.us/2/'
 
-OPENAPI = os.getenv('OPENAI_TOKEN')
+INSULTS = ("fuck you", "get gud", "youre a cunt", "this guy is a wanker ->")
