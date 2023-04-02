@@ -25,5 +25,6 @@ Bot commands
 -help -- Shows what commands are available
 -reset -- Update the dictionary with a refreshed version of the copypastas CSV
 -mc <minecraft server address> -- Get current logged in users of a MC server if any
+-ask ... -- Connect to ChatGPT and get a response in the chat (Needs OPENAI_TOKEN set in the .env)
 ``` 
 
