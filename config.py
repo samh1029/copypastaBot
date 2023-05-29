@@ -5,6 +5,8 @@ load_dotenv()
 # Discord bot token
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+OPENAPI = os.getenv('OPENAI_TOKEN')
+
 # Discord channel ID where the bot will post messages
 CHANNEL_ID = int(os.getenv('CHANNEL_ID', default=0))
 
