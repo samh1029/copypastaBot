@@ -116,5 +116,23 @@ async def mc(ctx):
         await ctx.send(f"Unexpected error: {e}", file=sys.stderr)
 
 
+@bot.command()
+async def ask(ctx, *words):
+    prompt = " ".join(words)
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            max_tokens=500
+        )
+        await ctx.send(response.choices[0].text)
+    except openai.error.AuthenticationError:
+        await ctx.send("Invalid OpenAI API key. Please check your API key and try again.")
+    except openai.error.APIError as e:
+        await ctx.send(f"OpenAI API error: {str(e)}")
+    except Exception as e:
+        await ctx.send(f"An error occurred: {str(e)}")
+
+
 copypasta_dict = reset_csv(COPYPASTAS_FILE)
 bot.run(TOKEN)
