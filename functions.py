@@ -1,6 +1,8 @@
 import csv
 import sys
+import random
 import re
+import requests
 
 def reset_csv(COPYPASTAS_FILE):
     try:
@@ -35,3 +37,10 @@ def is_valid_server_address(server_address):
     # (e.g. "mc.example.com:25565" or "123.45.67.89:25565")
     regex = r"^(?:(?:[a-z0-9]|[a-z0-9][a-z0-9\-]*[a-z0-9])\.)+[a-z]{2,}$|(?:\d{1,3}\.){3}\d{1,3}:\d{1,5}$"
     return bool(re.match(regex, server_address))
+
+
+def get_porn():
+    list = ["4k", "ass", "blowjob", "boobs", "cum", "feet", "hentai", "spank", "gasm", "lesbian", "lewd", "pussy"]
+    resp = requests.get(f"http://api.nekos.fun:8080/api/{random.choice(list)}")
+    data = resp.json()
+    return data["image"]

@@ -14,7 +14,7 @@ import requests
 from discord.ext import commands
 
 from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL, INSULTS
-from functions import reset_csv, read_file, is_valid_server_address
+from functions import reset_csv, read_file, is_valid_server_address, get_porn
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=COMMAND_PREFIX,intents=intents)
@@ -65,6 +65,15 @@ async def on_message(message):
         if should_send_copypasta and random.randrange(1, 3) == 1:
             await message.channel.send(value)
             break
+
+
+@bot.event
+async def on_voice_state_update(member, before, after):
+    channel = before.channel or after.channel
+    if channel.id == 644295914936074316 and member.id == 105398180107018240: # Insert voice channel ID
+        if before.channel is None and after.channel is not None: # Member joins the defined channel
+            link = get_porn()
+            await member.send(link)
 
 
 @bot.command(name="reset", help="Re-grab the copypasta details from the CSV")
