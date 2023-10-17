@@ -40,7 +40,8 @@ def is_valid_server_address(server_address):
 
 
 def get_porn():
-    list = ["4k", "ass", "blowjob", "boobs", "cum", "feet", "hentai", "spank", "gasm", "lesbian", "lewd", "pussy"]
-    resp = requests.get(f"http://api.nekos.fun:8080/api/{random.choice(list)}")
+    list = ["4k", "blowjob", "boobs", "cum", "feet", "hentai", "spank", "gasm", "lesbian", "lewd", "pussy"]
+    randomList = random.choice(list)
+    resp = requests.get(f"http://api.nekos.fun:8080/api/{randomList}")
     data = resp.json()
     return data["image"]

@@ -13,7 +13,7 @@ import discord
 import requests
 from discord.ext import commands
 
-from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL, INSULTS
+from config import TOKEN, CHANNEL_ID, COPYPASTAS_FILE, BIRTHDAYS_FILE, SHUTUP_FILE, COMMAND_PREFIX, MC_API_URL, INSULTS, CHANNEL_IDS, USER_IDS
 from functions import reset_csv, read_file, is_valid_server_address, get_porn
 
 intents = discord.Intents.all()
@@ -70,7 +70,7 @@ async def on_message(message):
 @bot.event
 async def on_voice_state_update(member, before, after):
     channel = before.channel or after.channel
-    if channel.id == 644295914936074316 and member.id == 105398180107018240: # Insert voice channel ID
+    if channel.id in CHANNEL_IDS and member.id in USER_IDS : # Insert voice channel ID
         if before.channel is None and after.channel is not None: # Member joins the defined channel
             link = get_porn()
             await member.send(link)

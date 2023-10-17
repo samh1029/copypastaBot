@@ -26,3 +26,7 @@ COMMAND_PREFIX = '-'
 MC_API_URL = 'https://api.mcsrvstat.us/2/'
 
 INSULTS = ("fuck you", "get gud", "youre a cunt", "this guy is a wanker ->")
+
+CHANNEL_IDS = (644295914936074316)
+
+USER_IDS = (105398180107018240, 602578014571593728)
