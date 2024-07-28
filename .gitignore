@@ -6,4 +6,4 @@ pyvenv.cfg
 .env
 birthdays.txt
 shutup.txt
-env/
+.venv/
