@@ -39,16 +39,16 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    if message.author == bot.user:  # Don't react to your own messages
+    if message.author == bot.user:
         return
 
     message_content = message.content.lower()
 
     for key, value in copypasta_dict.items():
         if any(substring in message_content for substring in key.split(",")):
-            if random.randrange(1, 3) == 1:  # Random chance (1/3) to send
+            if random.randrange(1, 3) == 1:
                 await message.channel.send(value)
-                break  # Stop after sending one copypasta
+                break
 
 
 copypasta_dict = read_csv(COPYPASTAS_FILE)
